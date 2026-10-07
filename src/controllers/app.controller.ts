@@ -1,18 +1,9 @@
 import { Request, Response } from "express";
-import { getAlltasks,createTask } from "../services/app.service";
-
-
-
-
-export const createTsk = async (req: Request, res: Response) => {
-  return res.status(200).json(tasks);
-};
-
-
-export const AllTasks = async (req: Request, res: Response) => {
-  const tasks = await getAlltasks;
-  return res.status(200).json(tasks);
-};
+import {
+  createTaskService,
+  getTasksService,
+  getTaskService,
+} from "../services/task.service";
 
 export const handleHealthCheck = async (req: Request, res: Response) => {
   const headers = req.headers.authorization;
@@ -23,8 +14,13 @@ export const handleHealthCheck = async (req: Request, res: Response) => {
 };
 
 export const handleCookieSet = async (req: Request, res: Response) => {
-  res.cookie("name", "SSS");
+  const token = req.headers.authorization;
+  res.cookie("Cookie", token);
   res.status(200).json({ Message: "Cookie set" });
+};
+export const handleCookieDelete = async (req: Request, res: Response) => {
+  res.clearCookie("name", { httpOnly: true });
+  res.status(200).json({ Message: "Cookie Deleted" });
 };
 
 export const handleGetCookie = async (req: Request, res: Response) => {
@@ -33,16 +29,30 @@ export const handleGetCookie = async (req: Request, res: Response) => {
 
 export const handleCreateTasks = async (req: Request, res: Response) => {
   const tasks = req.body;
+
   if (!tasks) {
     return res.status(400).json("create the tasks first");
   }
-  return res.status(200).json("task created successfully");
+
+  await createTaskService(tasks);
+
+  return res.status(200).json({ message: "Task Created Successfully" });
 };
 
 export const handleGetTasks = async (req: Request, res: Response) => {
-  const tasks = req.body;
-  if (!tasks) {
-    return res.status(400).json("create the tasks first");
+  const userId = req.query.userId?.toString();
+  if (!userId) {
+    return res.status(402).json({ message: "user not found" });
   }
-  return res.status(200).json({ tasks: tasks });
+  await getTasksService(userId);
+};
+
+export const handleGetTask = async (req: Request, res: Response) => {
+  const { taskId, userId } = req.query;
+
+  if (taskId != "String" || userId != "String") {
+    return res.status(401).json({ message: "taskId or userId is missing" });
+  }
+
+  await getTaskService(taskId, userId);
 };
