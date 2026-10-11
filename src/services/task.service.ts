@@ -21,8 +21,11 @@ export const createTaskService = (input: createTaskInput): Task => {
 };
 
 //get all tasks
-export const getTasksService = (userId: string): Task[] => {
-  return tasks.filter(task => task.userId === userId);
+export const getTasksService = (userId: string) => {
+  console.log(tasks.filter(task => task.userId === userId));
+  return userId!=tasks[0].userId
+    ? "user not found"
+    : tasks.filter(task => task.userId === userId);
 };
 
 //Get one task

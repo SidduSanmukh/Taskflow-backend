@@ -1,5 +1,5 @@
 import express from "express";
-import { handleCookieSet, handleGetCookie, handleHealthCheck,handleCreateTasks,handleGetTasks,handleCookieDelete } from "../controllers/app.controller";
+import { handleCookieSet, handleGetCookie, handleHealthCheck,handleCreateTasks,handleGetTasks,handleCookieDelete,handleGetTask } from "../controllers/app.controller";
 
 const router = express.Router();
 
@@ -9,6 +9,7 @@ router.get("/cookie_get", handleGetCookie)
 router.post("/cookie_delete", handleCookieDelete)
 router.post("/tasks",handleCreateTasks)
 router.get("/tasks", handleGetTasks)
+router.get("/task", handleGetTask)
 
 
 
