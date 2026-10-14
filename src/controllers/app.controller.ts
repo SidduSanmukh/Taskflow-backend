@@ -42,16 +42,16 @@ export const handleCreateTasks = async (req: Request, res: Response) => {
   return res.status(200).json({ message: "Task Created Successfully" });
 };
 
-export const handleGetTasks = async (req: Request, res: Response) => {
-  const { userId } = req.query;
+// export const handleGetTasks = async (req: Request, res: Response) => {
+//   const { userId } = req.query;
 
-  if (typeof userId !== "string") {
-    return res.status(400).json({ message: "Invalid userId" });
-  }
-  const tasks = await getTasksService(userId);
+//   if (typeof userId !== "string") {
+//     return res.status(400).json({ message: "Invalid userId" });
+//   }
+//   const tasks = await getTasksService(userId);
 
-  return res.status(200).json(tasks);
-};
+//   return res.status(200).json(tasks);
+// };
 
 export const handleGetTask = async (req: Request, res: Response) => {
 
@@ -67,3 +67,10 @@ export const handleGetTask = async (req: Request, res: Response) => {
   return res.status(200).json(task);
 
 };
+
+export const handleGetTasks = (req: Request, res: Response) => {
+  const tasks = getTaskService()
+  if(!tasks) return res.status(400).json({Message:"No tasks found"})
+  
+  return res.status(200).json(tasks)
+}
