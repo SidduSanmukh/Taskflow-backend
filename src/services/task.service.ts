@@ -70,17 +70,30 @@
 //   return true;
 // };
 
-
 import { taskDocument, TaskModel } from "../models/task.model";
 
-export const createTaskService = async (title:string, description:string,): Promise<taskDocument> => {
-  const taskData = 
-}
+export const createTaskService = async (
+  title: string,
+  description: string,
+): Promise<taskDocument> => {
+  const taskData = await TaskModel.create({
+    title,
+    description,
+  });
+  return taskData;
+};
 
-export const getTaskService = async () => {
-  const tasks = await TaskModel.find({})
-  if (tasks.length == 0) return []
-  
-  return tasks
-  
-}
+export const getTasksService = async (userId: string) => {
+  const tasks = await TaskModel.find({ userId });
+  if (tasks.length == 0) return [];
+
+  return tasks;
+};
+
+export const getTaskService = async (taskId: string, userId: string) => {
+  const task = await TaskModel.findOne({ taskId, userId });
+
+  if (tasks.length == 0) return [];
+
+  return task;
+};

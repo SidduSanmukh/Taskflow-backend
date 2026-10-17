@@ -1,7 +1,7 @@
 import express from "express";
 import { healthMiddleware } from "./middlewares/app.middleware";
 import cookieParser from "cookie-parser";
-import taskRouter from "./routes/app.route";
+import taskRouter from "./routes/task.roures";
 import authRouter from "./routes/auth.routes";
 const app = express();
 

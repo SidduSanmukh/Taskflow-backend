@@ -1,7 +1,36 @@
 import { Request, Response } from "express";
 import { registerService, loginService } from "../services/auth.service";
+import { AuthenticationRequest } from "../middlewares/auth.middleware";
 import { userModel } from "../models/user.model";
 
+//get user 
+export const getMe = async(req:AuthenticationRequest, res:Response) => {
+  
+  try {
+    const user = await userModel.findById(req.user?.id).select("name email createdAt")
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message:"User account not found."
+      })
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: user
+    })
+
+  } catch (error) {
+    console.error("Featching current user failed:", error)
+
+    return res.status(500).json({
+      success: false,
+      message:"unable to fetch current user."
+    })
+  }
+}
+
+//create user
 export const handleCreateUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password } = req.body;
@@ -47,6 +76,7 @@ export const handleCreateUser = async (req: Request, res: Response) => {
   }
 };
 
+//login user
 export const handleLogin = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
