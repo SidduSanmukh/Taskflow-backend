@@ -10,5 +10,7 @@ router.use(protect)
 router.post("/", handleCreateTasks)
 router.get("/", handleGetTasks)
 router.get("/:id", handleGetTask)
-router.patch("/:id", handleUpdateTask)
-router.delete("/:id", handleDeleteTask)
+// router.patch("/:id", handleUpdateTask)
+// router.delete("/:id", handleDeleteTask)
+
+export default router

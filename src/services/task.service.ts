@@ -1,4 +1,4 @@
-// import { Task, createTaskInput, updateTaskInput } from "../types/task.types";
+import { Task, createTaskInput, updateTaskInput } from "../types/task.types";
 
 // const tasks: Task[] = [];
 
@@ -71,14 +71,17 @@
 // };
 
 import { taskDocument, TaskModel } from "../models/task.model";
+import { Types } from "mongoose";
 
 export const createTaskService = async (
   title: string,
   description: string,
+  userId:string
 ): Promise<taskDocument> => {
   const taskData = await TaskModel.create({
     title,
     description,
+    userId: new Types.ObjectId(userId),
   });
   return taskData;
 };
@@ -91,9 +94,9 @@ export const getTasksService = async (userId: string) => {
 };
 
 export const getTaskService = async (taskId: string, userId: string) => {
-  const task = await TaskModel.findOne({ taskId, userId });
+  const task = await TaskModel.findOne({ _id:taskId, userId:userId });
 
-  if (tasks.length == 0) return [];
+  if (!task) return [];
 
   return task;
 };

@@ -36,20 +36,35 @@ export const handleCreateTasks = async (
   try {
     const { title, description } = req.body;
 
-    if (!title || !description) {
-      return res.status(400).json("Title and desxription are required.");
+    if (typeof title !== "string" || !title.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Title is required.",
+      });
     }
 
-    const data = await createTaskService(title, description);
+    const userId = req.user?.id;
+
+    if (!userId) {
+      return res.status(400).json({
+        success: false,
+        message: "Unauthorized. Please log in.",
+      });
+    }
+
+    const data = await createTaskService(title, description, userId);
     console.log(data);
 
-    return res
-      .status(200)
-      .json({ message: "Task Created Successfully", task: data });
+    return res.status(201).json({
+      success: true,
+      Message: "Task Created Successfully",
+      task: data,
+    });
   } catch (error) {
     console.error(error);
 
     return res.status(500).json({
+      success: false,
       message: "Failed to create task.",
     });
   }
@@ -73,15 +88,21 @@ export const handleGetTask = async (
   req: AuthenticationRequest,
   res: Response,
 ) => {
+  const taskId  = req.params.id;
   const userId = req.user?.id;
-  const { taskId } = req.params;
   if (!taskId || !userId) {
     return res.status(400).json({ message: "Task or user ID not found" });
   }
 
+  console.log(taskId)
   const task = await getTaskService(taskId as string, userId as string);
 
   if (!task) return res.status(400).json({ message: "Task not found" });
 
   return res.status(200).json(task);
+};
+
+export const updateTask = async (req: AuthenticationRequest, res: Response) => {
+  const userId = req.user?.id;
+  const { taskId } = req.params;
 };
