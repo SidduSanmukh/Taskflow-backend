@@ -76,7 +76,7 @@ import { Types } from "mongoose";
 export const createTaskService = async (
   title: string,
   description: string,
-  userId:string
+  userId: string,
 ): Promise<taskDocument> => {
   const taskData = await TaskModel.create({
     title,
@@ -94,9 +94,27 @@ export const getTasksService = async (userId: string) => {
 };
 
 export const getTaskService = async (taskId: string, userId: string) => {
-  const task = await TaskModel.findOne({ _id:taskId, userId:userId });
+  const task = await TaskModel.findOne({ _id: taskId, userId: userId });
 
-  if (!task) return [];
+  if (!task) return "No tasks created Yet..";
 
   return task;
+};
+
+export const updateTaskService = async (
+  taskId: string,
+  userId: string,
+  input: updateTaskInput,
+) => {
+  return await TaskModel.findOneAndUpdate(
+    { _id: taskId, userId },
+    { $set: input },
+    { new: true, runValidators: true },
+  );
+};
+
+export const deleteTaskService = async (taskId: string, userId: string) => {
+  const result = await TaskModel.deleteOne({ _id: taskId, userId });
+
+  return result.deletedCount > 0;
 };
