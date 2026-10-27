@@ -1,0 +1,34 @@
+services:
+  api:
+    build:
+      context: .
+    ports:
+      - "1826:1826"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      MONGODB_URI: mongodb://mongo:27017/taskflow
+    depends_on:
+      mongo:
+        condition: service_healthy
+    restart: unless-stopped
+      
+  mongo:
+    image: mongo:8.0
+    volumes:
+      - taskflow-mongo-data:/data/db
+    healthcheck:
+      test:
+        - CMD
+        - mongosh
+        - --quiet
+        - --evel
+        - "db.adminCommand('ping).ok"
+      interval: 5s
+      timeout: 5s
+      retries: 12
+      start_period: 10s
+
+volumes:
+  taskflow-mongo-data:

@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { registerService, loginService } from "../services/auth.service";
 import { AuthenticationRequest } from "../middlewares/auth.middleware";
 import { userModel } from "../models/user.model";
-import { resourceLimits } from "node:worker_threads";
 
 //get user 
 export const getMe = async(req:AuthenticationRequest, res:Response) => {
