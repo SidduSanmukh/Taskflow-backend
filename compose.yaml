@@ -23,8 +23,8 @@ services:
         - CMD
         - mongosh
         - --quiet
-        - --evel
-        - "db.adminCommand('ping).ok"
+        - --eval
+        - "db.adminCommand('ping').ok"
       interval: 5s
       timeout: 5s
       retries: 12
